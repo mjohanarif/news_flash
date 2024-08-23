@@ -29,6 +29,16 @@ Future<void> initLocator() async {
         repository: locator(),
       ),
     )
+    ..registerLazySingleton(
+      () => GetNewsUsecase(
+        repository: locator(),
+      ),
+    )
+    ..registerLazySingleton(
+      () => FilterLocalNewsUsecase(
+        repository: locator(),
+      ),
+    )
 
     // data source
     ..registerLazySingleton<NewsLocalDataSource>(
@@ -43,7 +53,15 @@ Future<void> initLocator() async {
     )
 
     // BLOC
-    ..registerFactory(() => GetNewsHeadlineBloc(locator()))
+    ..registerFactory(
+      () => GetNewsHeadlineBloc(locator()),
+    )
+    ..registerFactory(
+      () => GetNewsBloc(locator()),
+    )
+    ..registerFactory(
+      () => FilterLocalNewsBloc(locator()),
+    )
 
     // external
     ..registerLazySingleton(

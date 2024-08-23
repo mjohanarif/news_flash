@@ -29,9 +29,20 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppDimension.init(context);
-    return BlocProvider(
-      create: (context) => locator<GetNewsHeadlineBloc>()
-        ..add(const GetNewsHeadlineEvent.getNewsHeadline()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => locator<GetNewsHeadlineBloc>()
+            ..add(const GetNewsHeadlineEvent.getNewsHeadline()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              locator<GetNewsBloc>()..add(const GetNewsEvent.getNews()),
+        ),
+        BlocProvider(
+          create: (context) => locator<FilterLocalNewsBloc>(),
+        ),
+      ],
       child: MaterialApp(
         theme: ThemeData(
           useMaterial3: false,

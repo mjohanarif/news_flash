@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_flash/module/news/news.dart';
-import 'package:news_flash/module/news/presentation/ui/widgets/carousel_headline.dart';
 import 'package:news_flash/shared/shared.dart';
 
-class HomeNewsPage extends StatefulWidget {
+class HomeNewsPage extends StatelessWidget {
   const HomeNewsPage({super.key});
-
-  @override
-  State<HomeNewsPage> createState() => _HomeNewsPageState();
-}
-
-class _HomeNewsPageState extends State<HomeNewsPage> {
-  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,35 +13,80 @@ class _HomeNewsPageState extends State<HomeNewsPage> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            BlocBuilder<GetNewsBloc, GetNewsState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  orElse: () => const SizedBox(),
+                  loaded: (data) {
+                    return SearchInput(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.searchNewsPage,
+                        );
+                      },
+                      readOnly: true,
+                      onChanged: (value) {},
+                    );
+                  },
+                );
+              },
+            ),
+            const SpaceHeight(16),
             BlocBuilder<GetNewsHeadlineBloc, GetNewsHeadlineState>(
               builder: (context, state) {
                 return state.maybeWhen(
-                  orElse: () => Skeleton(
-                    width: AppDimension.width,
-                    height: 200,
-                  ),
+                  orElse: () => const SkeletonHeadline(),
                   loaded: (data) => CarouselHeadline(news: data),
                   error: (message) {
-                    return SizedBox(
-                      height: 200,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(message),
-                            IconButton(
-                              onPressed: () {
-                                context.read<GetNewsHeadlineBloc>().add(
-                                      const GetNewsHeadlineEvent
-                                          .getNewsHeadline(),
-                                    );
-                              },
-                              icon: const Icon(Icons.refresh),
-                            ),
-                            const Text('Try to reload'),
-                          ],
+                    return ErrorResponseWidget(
+                      message: message,
+                      onTap: () {
+                        context.read<GetNewsHeadlineBloc>().add(
+                              const GetNewsHeadlineEvent.getNewsHeadline(),
+                            );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+            const SpaceHeight(16),
+            BlocBuilder<GetNewsBloc, GetNewsState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  orElse: () => const SkeletonNews(),
+                  error: (message) {
+                    return ErrorResponseWidget(
+                      message: message,
+                      onTap: () {
+                        context.read<GetNewsBloc>().add(
+                              const GetNewsEvent.getNews(),
+                            );
+                      },
+                    );
+                  },
+                  loaded: (data) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'News Flash',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-                      ),
+                        const SpaceHeight(12),
+                        ListView.separated(
+                          shrinkWrap: true,
+                          primary: false,
+                          itemBuilder: (context, index) {
+                            return NewsCard(data: data.articles?[index]);
+                          },
+                          separatorBuilder: (context, index) =>
+                              const SpaceHeight(12),
+                          itemCount: data.articles?.length ?? 0,
+                        ),
+                      ],
                     );
                   },
                 );

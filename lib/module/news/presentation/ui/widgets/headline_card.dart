@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_flash/shared/shared.dart';
 
@@ -19,14 +18,9 @@ class HeadlineCard extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          CachedNetworkImage(
-            imageUrl: urlToImage ??
-                'https://diony.co.uk/wp-content/themes/diony/assets/images/placeholder-news.jpeg',
+          CustomCachedImage(
+            urlToImage: urlToImage,
             height: 206,
-            width: AppDimension.width,
-            fit: BoxFit.cover,
-            errorWidget: (context, url, error) =>
-                Image.asset('assets/placeholder-news.jpeg'),
           ),
           Align(
             alignment: Alignment.bottomCenter,

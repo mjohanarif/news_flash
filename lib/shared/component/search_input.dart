@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:news_flash/shared/shared.dart';
 
 class SearchInput extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final Function(String value) onChanged;
+  final bool readOnly;
+  final VoidCallback? onTap;
 
   const SearchInput({
     super.key,
-    required this.controller,
+    this.controller,
     required this.onChanged,
+    this.readOnly = false,
+    this.onTap,
   });
 
   @override
@@ -19,6 +23,8 @@ class SearchInput extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: TextFormField(
+        onTap: onTap,
+        readOnly: readOnly,
         controller: controller,
         onChanged: onChanged,
         decoration: InputDecoration(
@@ -38,7 +44,7 @@ class SearchInput extends StatelessWidget {
           ),
           suffix: GestureDetector(
             onTap: () {
-              controller.text = '';
+              controller?.text = '';
               onChanged('');
             },
             child: const Icon(

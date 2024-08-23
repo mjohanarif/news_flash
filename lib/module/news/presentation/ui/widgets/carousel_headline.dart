@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:news_flash/module/news/news.dart';
-import 'package:news_flash/module/news/presentation/ui/widgets/headline_card.dart';
 import 'package:news_flash/shared/shared.dart';
 
 class CarouselHeadline extends StatefulWidget {
@@ -23,7 +22,13 @@ class _CarouselHeadlineState extends State<CarouselHeadline> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const Text(
+          'Headline News',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SpaceHeight(12),
         CarouselSlider(
           items: widget.news.articles
               ?.map(
@@ -50,7 +55,7 @@ class _CarouselHeadlineState extends State<CarouselHeadline> {
             },
           ),
         ),
-        const SpaceHeight(22),
+        const SpaceHeight(12),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: widget.news.articles?.asMap().entries.map((entry) {

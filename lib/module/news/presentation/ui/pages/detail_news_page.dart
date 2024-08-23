@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_flash/module/news/news.dart';
 import 'package:news_flash/shared/shared.dart';
@@ -21,7 +20,7 @@ class DetailNewsPage extends StatelessWidget {
       body: ListView(
         physics: const ClampingScrollPhysics(),
         children: [
-          CachedNetworkImage(imageUrl: article?.urlToImage ?? ''),
+          CustomCachedImage(urlToImage: article?.urlToImage),
           ListView(
             padding: const EdgeInsets.all(16),
             shrinkWrap: true,

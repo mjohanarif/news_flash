@@ -4,6 +4,7 @@ import 'package:news_flash/module/news/news.dart';
 class AppRoutes {
   static const String main = '/';
   static const String detailNewsPage = '/detail-news-page';
+  static const String searchNewsPage = '/search-news-page';
   static Route onGenerateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case main:
@@ -16,6 +17,11 @@ class AppRoutes {
           DetailNewsPage(
             article: settings.arguments as ArticleModel?,
           ),
+        );
+
+      case searchNewsPage:
+        return _materialRoute(
+          const SearchNewsPage(),
         );
 
       default:
